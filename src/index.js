@@ -9,6 +9,7 @@ import CreateForm from './CreateForm';
 
 
 
+
 class _App extends Component{
   componentDidMount(){
     this.props.bootstrap();
@@ -22,7 +23,7 @@ class _App extends Component{
     return (
       <div>
         <h1>Acme Groceries</h1>
-        <Nav />
+        {/* <Nav /> */}
         <CreateForm />
         <Groceries />
       </div>
@@ -34,14 +35,14 @@ const App = connect(
   state => state,
   (dispatch)=> {
     return {
-      setView: (view)=> dispatch({ type: 'SET_VIEW', view }), 
+      setView: (view)=> dispatch({ type: 'SET_VIEW', view }),
       bootstrap: async()=> {
         const groceries = (await axios.get('/api/groceries')).data;
         dispatch({
           type: 'LOAD',
           groceries
         })
-      } 
+      }
     }
   }
 )(_App);

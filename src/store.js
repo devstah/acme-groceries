@@ -1,25 +1,54 @@
-import { createStore } from 'redux';
+import { createStore, combineReducers } from "redux";
 
 const initialState = {
   groceries: [],
-  view: ''
+  view: "",
+}; //still needed or no
+
+const loadReducer = (state = initialState, action) => {
+  if (action.type === "LOAD") {
+    // console.log("youre hitting my load reducer", action.groceries);
+    return {
+      ...state,
+      groceries: [...state.groceries, action.groceries],
+    };
+  } else {
+    return state;
+  }
 };
-const store = createStore((state = initialState, action)=> {
-  if(action.type === 'LOAD'){
-    state = {...state, groceries: action.groceries };
-  }
-  if(action.type === 'UPDATE'){
-    state = {...state, groceries: state.groceries.map(grocery => grocery.id === action.grocery.id ? action.grocery : grocery )};
-  }
-  if(action.type === 'CREATE'){
-    state = {...state, groceries: [...state.groceries, action.grocery ]}
-  }
-  if(action.type === 'SET_VIEW'){
-    state = {...state, view: action.view};
+
+const updateReducer = (state = [], action) => {
+  if (action.type === "UPDATE") {
+    let updated = state.map((grocery) =>
+      grocery.id === action.grocery.id ? action.grocery : grocery
+    );
+    state = updated; //let's see if this works
   }
   return state;
+};
+
+const createReducer = (state = [], action) => {
+  if (action.type === "CREATE") {
+    // state = {...state, groceries: [...state.groceries, action.grocery ]}
+    state = [...state, action.grocery]; //perhaps?
+  }
+  return state;
+};
+
+const setViewReducer = (state = "", action) => {
+  if (action.type === "SET_VIEW") {
+    state = action.view;
+  }
+  return state;
+};
+
+const reducer = combineReducers({
+  load: loadReducer,
+  update: updateReducer,
+  create: createReducer,
+  setView: setViewReducer,
 });
 
+const store = createStore(reducer);
+
 export default store;
-
-

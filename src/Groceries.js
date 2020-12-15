@@ -3,10 +3,10 @@ import axios from 'axios';
 
 import { connect } from 'react-redux';
 
-const _Groceries = ({ groceries, view, toggle, create })=> {
+const _Groceries = ({ load: {groceries}, create, toggle})=> {
   return (
     <div>
-      <button onClick={ create }>Create</button>
+      {/* <button onClick={ create }>Create</button> */}
       <ul>
         {
           groceries.filter(grocery => !view || ( grocery.purchased && view === 'purchased') ||( !grocery.purchased && view === 'needs') ).map( grocery => {
@@ -26,12 +26,12 @@ const mapDispatchToProps = (dispatch)=> {
       const updated = (await axios.put(`/api/groceries/${grocery.id}`, { purchased: !grocery.purchased })).data;
       dispatch({ type: 'UPDATE', grocery: updated});
 
-    }, 
+    },
     create: async()=>{
       const grocery = (await axios.post('/api/groceries/random')).data;
       dispatch({ type: 'CREATE', grocery });
 
-    } 
+    }
   };
 };
 
